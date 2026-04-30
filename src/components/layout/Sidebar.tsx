@@ -25,14 +25,17 @@ export function Sidebar() {
 
   return (
     <>
-      {/* Mobile toggle */}
-      <button
-        className="fixed top-4 left-4 z-50 p-2.5 rounded-xl btn-secondary lg:hidden"
-        onClick={() => setOpen((v) => !v)}
-        aria-label="Toggle menu"
-      >
-        {open ? <X size={20} /> : <Menu size={20} />}
-      </button>
+      {/* Mobile toggle — only show hamburger when sidebar is closed */}
+      {!open && (
+        <button
+          className="fixed top-4 left-4 p-2.5 rounded-xl btn-secondary lg:hidden"
+          style={{ zIndex: 50 }}
+          onClick={() => setOpen(true)}
+          aria-label="Open menu"
+        >
+          <Menu size={20} />
+        </button>
+      )}
 
       {/* Backdrop */}
       {open && (
@@ -54,18 +57,33 @@ export function Sidebar() {
         `}
         style={{ zIndex: 45 }}
       >
-        {/* Logo */}
+        {/* Logo + Close button row */}
         <div className="flex items-center gap-3 px-6 py-6 border-b border-[var(--border)]">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center"
-            style={{ background: 'linear-gradient(135deg, #7c6fea, #12d8c0)' }}>
-            <Clock size={18} className="text-white" />
-          </div>
-          <div>
-            <div className="font-bold text-[var(--text-primary)] text-base leading-tight">
-              ShiftTracker
+          <Link
+            href="/dashboard"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 flex-1 min-w-0"
+          >
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+              style={{ background: 'linear-gradient(135deg, #7c6fea, #12d8c0)' }}>
+              <Clock size={18} className="text-white" />
             </div>
-            <div className="text-[var(--text-muted)] text-xs">Work Log</div>
-          </div>
+            <div className="min-w-0">
+              <div className="font-bold text-[var(--text-primary)] text-base leading-tight">
+                ShiftTracker
+              </div>
+              <div className="text-[var(--text-muted)] text-xs">Work Log</div>
+            </div>
+          </Link>
+
+          {/* Close button — inside sidebar header, only on mobile */}
+          <button
+            className="btn-ghost p-1.5 rounded-lg flex-shrink-0 lg:hidden"
+            onClick={() => setOpen(false)}
+            aria-label="Close menu"
+          >
+            <X size={18} />
+          </button>
         </div>
 
         {/* Nav */}
