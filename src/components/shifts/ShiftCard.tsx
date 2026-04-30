@@ -78,7 +78,7 @@ export function ShiftCard({ shift, onDelete }: ShiftCardProps) {
         {/* Actions */}
         <div className="flex gap-2 mt-3 pl-6 pt-3 border-t border-[var(--border)]">
           <Link
-            href={`/shifts/${shift.id}/edit`}
+            href={`/shifts/edit?id=${shift.id}`}
             className="btn-ghost py-1.5 px-3 text-xs"
           >
             <Pencil size={13} />

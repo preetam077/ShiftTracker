@@ -141,7 +141,7 @@ export function ShiftList({ shifts, onDelete, sortField, sortDirection, onSort }
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-1">
-                          <Link href={`/shifts/${s.id}/edit`} className="btn-ghost p-1.5 rounded-lg" title="Edit">
+                          <Link href={`/shifts/edit?id=${s.id}`} className="btn-ghost p-1.5 rounded-lg" title="Edit">
                             <Pencil size={14} />
                           </Link>
                           <button

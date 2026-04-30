@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { useShifts } from '@/hooks/useShifts';
 import { ShiftForm } from '@/components/shifts/ShiftForm';
@@ -10,20 +10,20 @@ import { getShiftById } from '@/lib/storage';
 
 type ShiftFormData = Omit<Shift, 'id' | 'totalHours' | 'totalEarnings' | 'createdAt' | 'updatedAt'>;
 
-export default function EditShiftPage() {
+function EditShiftContent() {
   const router = useRouter();
-  const params = useParams();
+  const searchParams = useSearchParams();
   const { updateShift } = useShifts();
   const [shift, setShift] = useState<Shift | null>(null);
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    const id = Array.isArray(params.id) ? params.id[0] : params.id;
+    const id = searchParams.get('id');
     if (!id) { setNotFound(true); return; }
     const found = getShiftById(id);
     if (!found) { setNotFound(true); return; }
     setShift(found);
-  }, [params.id]);
+  }, [searchParams]);
 
   const handleSubmit = (data: ShiftFormData) => {
     if (!shift) return;
@@ -67,5 +67,20 @@ export default function EditShiftPage() {
         <ShiftForm initialData={shift} onSubmit={handleSubmit} isEdit />
       </div>
     </div>
+  );
+}
+
+import { Suspense } from 'react';
+
+export default function EditShiftPage() {
+  return (
+    <Suspense fallback={
+      <div className="max-w-2xl mx-auto space-y-5 pt-10 lg:pt-0">
+        <div className="h-10 shimmer rounded-xl" />
+        <div className="h-64 shimmer rounded-xl" />
+      </div>
+    }>
+      <EditShiftContent />
+    </Suspense>
   );
 }
