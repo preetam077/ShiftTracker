@@ -1,6 +1,6 @@
 'use client';
 
-import { BarChart3, Calendar, Clock, TrendingUp, Zap } from 'lucide-react';
+import { BarChart3, Briefcase, Calendar, Clock, TrendingUp } from 'lucide-react';
 import { formatEuro, formatHours } from '@/lib/calculations';
 import { MonthlyStats } from '@/lib/types';
 import { StatCard } from '@/components/ui/StatCard';
@@ -56,10 +56,10 @@ export function MonthlyDashboard({ stats, month, year }: MonthlyDashboardProps) 
             delay={2}
           />
           <StatCard
-            label="Avg Hourly Pay"
-            value={formatEuro(stats.avgHourlyPay)}
-            sub="per hour"
-            icon={<Zap size={20} />}
+            label="Work Type"
+            value={`FT ${stats.fullTimeDays} · PT ${stats.partTimeDays}`}
+            sub="FT > 4h · PT ≤ 4h"
+            icon={<Briefcase size={20} />}
             accentColor="#ec4899"
             delay={3}
           />

@@ -101,14 +101,18 @@ export function getMonthlyStats(shifts: Shift[], month: number, year: number): M
     monthShifts.reduce((acc, s) => acc + s.totalEarnings, 0).toFixed(2)
   );
   const uniqueDays = new Set(monthShifts.map((s) => s.date)).size;
-  const avgHourlyPay =
-    totalShifts > 0
-      ? parseFloat(
-          (
-            monthShifts.reduce((acc, s) => acc + s.hourlyPay, 0) / totalShifts
-          ).toFixed(2)
-        )
-      : 0;
+
+  // Group shifts by date and sum hours per day to classify FT vs PT
+  const hoursPerDay: Record<string, number> = {};
+  for (const s of monthShifts) {
+    hoursPerDay[s.date] = (hoursPerDay[s.date] || 0) + s.totalHours;
+  }
+  let fullTimeDays = 0;
+  let partTimeDays = 0;
+  for (const hours of Object.values(hoursPerDay)) {
+    if (hours > 4) fullTimeDays++;
+    else partTimeDays++;
+  }
 
   const companySummaries = groupByCompany(monthShifts);
   const dailyEarnings = getDailyEarnings(monthShifts, month, year);
@@ -118,7 +122,8 @@ export function getMonthlyStats(shifts: Shift[], month: number, year: number): M
     totalHours,
     totalEarnings,
     totalShifts,
-    avgHourlyPay,
+    fullTimeDays,
+    partTimeDays,
     companySummaries,
     dailyEarnings,
   };

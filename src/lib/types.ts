@@ -18,7 +18,8 @@ export interface MonthlyStats {
   totalHours: number;
   totalEarnings: number;
   totalShifts: number;
-  avgHourlyPay: number;
+  fullTimeDays: number;
+  partTimeDays: number;
   companySummaries: CompanySummary[];
   dailyEarnings: DailyEarning[];
 }
