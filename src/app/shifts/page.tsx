@@ -11,7 +11,19 @@ import { FilterControls } from '@/components/filters/FilterControls';
 import { ShiftList } from '@/components/shifts/ShiftList';
 
 export default function ShiftsPage() {
-  const { shifts, removeShift, getUniqueCompanies, getUniqueRoles } = useShifts();
+  const { shifts, loading, removeShift, getUniqueCompanies, getUniqueRoles } = useShifts();
+
+  if (loading) {
+    return (
+      <div className="space-y-4 pt-10 lg:pt-0">
+        <div className="h-10 shimmer rounded-xl w-48" />
+        <div className="h-14 shimmer rounded-xl" />
+        <div className="space-y-3">
+          {[1,2,3].map(i => <div key={i} className="h-20 shimmer rounded-xl" />)}
+        </div>
+      </div>
+    );
+  }
   const { filters, setMonth, setYear, setCompany, setRole, setSort, resetFilters } = useFilters();
 
   const filtered = useMemo(() => {

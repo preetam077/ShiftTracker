@@ -8,10 +8,12 @@ import {
   CalendarDays,
   ChevronRight,
   Clock,
+  LogOut,
   Menu,
   Plus,
   X,
 } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 const NAV = [
   { href: '/dashboard', label: 'Dashboard', icon: BarChart3 },
@@ -22,6 +24,7 @@ const NAV = [
 export function Sidebar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const { user, signOut } = useAuth();
 
   return (
     <>
@@ -128,9 +131,24 @@ export function Sidebar() {
         </nav>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-[var(--border)]">
+        <div className="px-6 py-4 border-t border-[var(--border)] space-y-3">
+          {user && (
+            <div className="flex items-center gap-2">
+              <p className="text-[var(--text-muted)] text-xs truncate flex-1" title={user.email ?? ''}>
+                {user.email}
+              </p>
+              <button
+                onClick={signOut}
+                className="btn-ghost p-1.5 rounded-lg flex-shrink-0"
+                aria-label="Sign out"
+                title="Sign out"
+              >
+                <LogOut size={14} />
+              </button>
+            </div>
+          )}
           <p className="text-[var(--text-muted)] text-xs">
-            Data stored locally · <span className="text-[var(--accent-teal)]">v1.0</span>
+            Synced with cloud · <span className="text-[var(--accent-teal)]">v2.0</span>
           </p>
         </div>
       </aside>

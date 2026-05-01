@@ -15,12 +15,24 @@ const MONTHS = [
 ];
 
 export default function DashboardPage() {
-  const { shifts } = useShifts();
+  const { shifts, loading } = useShifts();
   const now = new Date();
   const [month, setMonth] = useState(now.getMonth() + 1);
   const [year, setYear] = useState(now.getFullYear());
 
   const stats = getMonthlyStats(shifts, month, year);
+
+  if (loading) {
+    return (
+      <div className="space-y-6 pt-10 lg:pt-0">
+        <div className="h-10 shimmer rounded-xl w-48" />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {[1,2,3,4].map(i => <div key={i} className="h-28 shimmer rounded-xl" />)}
+        </div>
+        <div className="h-64 shimmer rounded-xl" />
+      </div>
+    );
+  }
   const years = Array.from({ length: 5 }, (_, i) => now.getFullYear() - i);
 
   const prevMonth = () => {

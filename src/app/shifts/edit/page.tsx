@@ -7,6 +7,7 @@ import { useShifts } from '@/hooks/useShifts';
 import { ShiftForm } from '@/components/shifts/ShiftForm';
 import { Shift } from '@/lib/types';
 import { getShiftById } from '@/lib/storage';
+import { useAuth } from '@/contexts/AuthContext';
 
 type ShiftFormData = Omit<Shift, 'id' | 'totalHours' | 'totalEarnings' | 'createdAt' | 'updatedAt'>;
 
@@ -14,20 +15,24 @@ function EditShiftContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { updateShift } = useShifts();
+  const { user } = useAuth();
   const [shift, setShift] = useState<Shift | null>(null);
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
+    if (!user) return;
     const id = searchParams.get('id');
     if (!id) { setNotFound(true); return; }
-    const found = getShiftById(id);
-    if (!found) { setNotFound(true); return; }
-    setShift(found);
-  }, [searchParams]);
 
-  const handleSubmit = (data: ShiftFormData) => {
+    getShiftById(id, user.id).then((found) => {
+      if (!found) { setNotFound(true); return; }
+      setShift(found);
+    });
+  }, [searchParams, user]);
+
+  const handleSubmit = async (data: ShiftFormData) => {
     if (!shift) return;
-    updateShift(shift.id, data);
+    await updateShift(shift.id, data);
     router.push('/shifts');
   };
 

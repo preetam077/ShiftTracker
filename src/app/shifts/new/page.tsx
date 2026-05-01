@@ -12,13 +12,13 @@ export default function NewShiftPage() {
   const router = useRouter();
   const { addShift } = useShifts();
 
-  const handleSubmit = (data: ShiftFormData) => {
-    addShift(data);
+  const handleSubmit = async (data: ShiftFormData) => {
+    await addShift(data);
     router.push('/shifts');
   };
 
-  const handleSubmitAndAdd = (data: ShiftFormData) => {
-    addShift(data);
+  const handleSubmitAndAdd = async (data: ShiftFormData) => {
+    await addShift(data);
     // Soft-refresh same page by pushing same route
     router.refresh();
     window.scrollTo({ top: 0, behavior: 'smooth' });
