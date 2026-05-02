@@ -12,6 +12,7 @@ import { ShiftList } from '@/components/shifts/ShiftList';
 
 export default function ShiftsPage() {
   const { shifts, loading, removeShift, getUniqueCompanies, getUniqueRoles } = useShifts();
+  const { filters, setMonth, setYear, setCompany, setRole, setSort, resetFilters } = useFilters();
 
   if (loading) {
     return (
@@ -24,7 +25,6 @@ export default function ShiftsPage() {
       </div>
     );
   }
-  const { filters, setMonth, setYear, setCompany, setRole, setSort, resetFilters } = useFilters();
 
   const filtered = useMemo(() => {
     let result = getShiftsForMonth(shifts, filters.month, filters.year);
