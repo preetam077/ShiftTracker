@@ -4,6 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 import { Sidebar } from './Sidebar';
 
 function AuthGate({ children }: { children: React.ReactNode }) {
@@ -52,8 +53,10 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
-    <AuthProvider>
-      <AuthGate>{children}</AuthGate>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <AuthGate>{children}</AuthGate>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }

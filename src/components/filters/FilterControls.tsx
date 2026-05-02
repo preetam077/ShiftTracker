@@ -58,7 +58,7 @@ export function FilterControls({
             onChange={(e) => onMonthChange(Number(e.target.value))}
           >
             {MONTHS.map((m, i) => (
-              <option key={m} value={i + 1} style={{ background: '#161923' }}>{m}</option>
+              <option key={m} value={i + 1} style={{ background: 'var(--option-bg)' }}>{m}</option>
             ))}
           </select>
           <select
@@ -67,7 +67,7 @@ export function FilterControls({
             onChange={(e) => onYearChange(Number(e.target.value))}
           >
             {years.map((y) => (
-              <option key={y} value={y} style={{ background: '#161923' }}>{y}</option>
+              <option key={y} value={y} style={{ background: 'var(--option-bg)' }}>{y}</option>
             ))}
           </select>
           <button onClick={nextMonth} className="btn-ghost p-1.5 rounded-lg">

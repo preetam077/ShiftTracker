@@ -17,6 +17,32 @@
     --accent-pink: #ec4899;
     --gradient-accent: linear-gradient(135deg, #7c6fea 0%, #12d8c0 100%);
     --gradient-card: linear-gradient(135deg, #161923 0%, #1a1f30 100%);
+    --scrollbar-track: #111420;
+    --scrollbar-thumb: #1e2235;
+    --scrollbar-hover: #4f566e;
+    --option-bg: #161923;
+  }
+
+  [data-theme='light'] {
+    --bg-base: #f0f2f7;
+    --bg-surface: #ffffff;
+    --bg-card: #ffffff;
+    --bg-elevated: #e8ebf0;
+    --border: #0000000d;
+    --border-hover: #00000018;
+    --text-primary: #1a1d2e;
+    --text-secondary: #555b70;
+    --text-muted: #8e95a8;
+    --accent-purple: #6c5ce7;
+    --accent-teal: #00b894;
+    --accent-amber: #e67e22;
+    --accent-pink: #e84393;
+    --gradient-accent: linear-gradient(135deg, #6c5ce7 0%, #00b894 100%);
+    --gradient-card: linear-gradient(135deg, #ffffff 0%, #f5f7fc 100%);
+    --scrollbar-track: #e8ebf0;
+    --scrollbar-thumb: #ccd0d9;
+    --scrollbar-hover: #a0a5b5;
+    --option-bg: #ffffff;
   }
 
   * {
