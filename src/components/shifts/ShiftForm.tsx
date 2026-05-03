@@ -7,6 +7,7 @@ import {
   Building2,
   CalendarDays,
   Clock,
+  Coffee,
   Euro,
   FileText,
   Save,
@@ -41,6 +42,7 @@ export function ShiftForm({ initialData, onSubmit, onSubmitAndAdd, isEdit }: Shi
     role: initialData?.role ?? '',
     startTime: initialData?.startTime ?? '',
     endTime: initialData?.endTime ?? '',
+    breakMinutes: initialData?.breakMinutes ?? 0,
     hourlyPay: initialData?.hourlyPay ?? 0,
     notes: initialData?.notes ?? '',
   });
@@ -49,13 +51,13 @@ export function ShiftForm({ initialData, onSubmit, onSubmitAndAdd, isEdit }: Shi
 
   useEffect(() => {
     if (form.startTime && form.endTime) {
-      const h = calculateHours(form.startTime, form.endTime);
+      const h = calculateHours(form.startTime, form.endTime, form.breakMinutes || 0);
       const e = calculateEarnings(h, form.hourlyPay || 0);
       setPreview({ hours: h, earnings: e, valid: h > 0 });
     } else {
       setPreview({ hours: 0, earnings: 0, valid: false });
     }
-  }, [form.startTime, form.endTime, form.hourlyPay]);
+  }, [form.startTime, form.endTime, form.breakMinutes, form.hourlyPay]);
 
   const set = (field: keyof ShiftFormData, value: string | number) => {
     setForm((f) => ({ ...f, [field]: value }));
@@ -185,6 +187,24 @@ export function ShiftForm({ initialData, onSubmit, onSubmitAndAdd, isEdit }: Shi
             onChange={(e) => set('endTime', e.target.value)}
           />
           {errors.endTime && <p className="text-red-400 text-xs mt-1">{errors.endTime}</p>}
+        </div>
+
+        {/* Break */}
+        <div>
+          <div className="flex items-center gap-1.5 text-[var(--text-secondary)] text-sm font-medium mb-1.5">
+            <span className="text-[var(--accent-purple)]"><Coffee size={14} /></span>
+            <span>Break (minutes)</span>
+          </div>
+          <input
+            id="shift-break"
+            type="number"
+            min="0"
+            step="5"
+            className="input-base"
+            placeholder="e.g. 30"
+            value={form.breakMinutes || ''}
+            onChange={(e) => set('breakMinutes', parseInt(e.target.value) || 0)}
+          />
         </div>
 
         {/* Notes — full width */}

@@ -4,7 +4,7 @@ import { CompanySummary, DailyEarning, MonthlyStats, Shift } from './types';
 // Time / hour calculations
 // ---------------------------------------------------------------------------
 
-export function calculateHours(startTime: string, endTime: string): number {
+export function calculateHours(startTime: string, endTime: string, breakMinutes: number = 0): number {
   const [sh, sm] = startTime.split(':').map(Number);
   const [eh, em] = endTime.split(':').map(Number);
   let startMinutes = sh * 60 + sm;
@@ -13,7 +13,8 @@ export function calculateHours(startTime: string, endTime: string): number {
   if (endMinutes <= startMinutes) {
     endMinutes += 24 * 60;
   }
-  return parseFloat(((endMinutes - startMinutes) / 60).toFixed(2));
+  const workedMinutes = Math.max(0, endMinutes - startMinutes - breakMinutes);
+  return parseFloat((workedMinutes / 60).toFixed(2));
 }
 
 export function calculateEarnings(totalHours: number, hourlyPay: number): number {
@@ -190,6 +191,7 @@ export function exportToCSV(shifts: Shift[], month: number, year: number): void 
     'Role',
     'Start Time',
     'End Time',
+    'Break (min)',
     'Total Hours',
     'Hourly Pay (€)',
     'Total Earnings (€)',
@@ -201,6 +203,7 @@ export function exportToCSV(shifts: Shift[], month: number, year: number): void 
     s.role,
     s.startTime,
     s.endTime,
+    s.breakMinutes ?? 0,
     s.totalHours.toFixed(2),
     s.hourlyPay.toFixed(2),
     s.totalEarnings.toFixed(2),

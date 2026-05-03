@@ -5,6 +5,7 @@ export interface Shift {
   role: string;
   startTime: string; // HH:mm
   endTime: string; // HH:mm
+  breakMinutes: number; // break duration in minutes
   hourlyPay: number;
   totalHours: number;
   totalEarnings: number;

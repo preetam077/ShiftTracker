@@ -58,7 +58,7 @@ export function useShifts() {
   const addShift = useCallback(
     async (data: Omit<Shift, 'id' | 'totalHours' | 'totalEarnings' | 'createdAt' | 'updatedAt'>) => {
       if (!user) return;
-      const totalHours = calculateHours(data.startTime, data.endTime);
+      const totalHours = calculateHours(data.startTime, data.endTime, data.breakMinutes ?? 0);
       const totalEarnings = calculateEarnings(totalHours, data.hourlyPay);
       const now = new Date().toISOString();
       const shift: Shift = {
@@ -84,7 +84,7 @@ export function useShifts() {
       if (!user) return;
       const existing = shifts.find((s) => s.id === id);
       if (!existing) return;
-      const totalHours = calculateHours(data.startTime, data.endTime);
+      const totalHours = calculateHours(data.startTime, data.endTime, data.breakMinutes ?? 0);
       const totalEarnings = calculateEarnings(totalHours, data.hourlyPay);
       const shift: Shift = {
         ...existing,

@@ -11,6 +11,7 @@ interface ShiftRow {
   role: string;
   start_time: string;
   end_time: string;
+  break_minutes: number;
   hourly_pay: number;
   total_hours: number;
   total_earnings: number;
@@ -27,6 +28,7 @@ function rowToShift(row: ShiftRow): Shift {
     role: row.role,
     startTime: row.start_time,
     endTime: row.end_time,
+    breakMinutes: row.break_minutes ?? 0,
     hourlyPay: row.hourly_pay,
     totalHours: row.total_hours,
     totalEarnings: row.total_earnings,
@@ -45,6 +47,7 @@ function shiftToRow(shift: Shift, userId: string): Omit<ShiftRow, 'created_at' |
     role: shift.role,
     start_time: shift.startTime,
     end_time: shift.endTime,
+    break_minutes: shift.breakMinutes ?? 0,
     hourly_pay: shift.hourlyPay,
     total_hours: shift.totalHours,
     total_earnings: shift.totalEarnings,
