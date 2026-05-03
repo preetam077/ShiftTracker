@@ -14,18 +14,6 @@ export default function ShiftsPage() {
   const { shifts, loading, removeShift, getUniqueCompanies, getUniqueRoles } = useShifts();
   const { filters, setMonth, setYear, setCompany, setRole, setSort, resetFilters } = useFilters();
 
-  if (loading) {
-    return (
-      <div className="space-y-4 pt-10 lg:pt-0">
-        <div className="h-10 shimmer rounded-xl w-48" />
-        <div className="h-14 shimmer rounded-xl" />
-        <div className="space-y-3">
-          {[1,2,3].map(i => <div key={i} className="h-20 shimmer rounded-xl" />)}
-        </div>
-      </div>
-    );
-  }
-
   const filtered = useMemo(() => {
     let result = getShiftsForMonth(shifts, filters.month, filters.year);
     if (filters.company) result = result.filter((s) => s.company === filters.company);
@@ -44,6 +32,18 @@ export default function ShiftsPage() {
     });
     return result;
   }, [shifts, filters]);
+
+  if (loading) {
+    return (
+      <div className="space-y-4 pt-10 lg:pt-0">
+        <div className="h-10 shimmer rounded-xl w-48" />
+        <div className="h-14 shimmer rounded-xl" />
+        <div className="space-y-3">
+          {[1,2,3].map(i => <div key={i} className="h-20 shimmer rounded-xl" />)}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4 pt-10 lg:pt-0">

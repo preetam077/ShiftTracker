@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Clock, Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -17,10 +17,11 @@ export default function AuthPage() {
   const [signUpSuccess, setSignUpSuccess] = useState(false);
 
   // If already logged in, redirect
-  if (!authLoading && user) {
-    router.replace('/dashboard');
-    return null;
-  }
+  useEffect(() => {
+    if (!authLoading && user) {
+      router.replace('/dashboard');
+    }
+  }, [authLoading, user, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
