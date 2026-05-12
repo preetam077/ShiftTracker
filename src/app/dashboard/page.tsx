@@ -7,7 +7,7 @@ import { useShifts } from '@/hooks/useShifts';
 import { exportToCSV, getMonthlyStats } from '@/lib/calculations';
 import { MonthlyDashboard } from '@/components/dashboard/MonthlyDashboard';
 import { CompanySummary } from '@/components/dashboard/CompanySummary';
-import { EarningsChart } from '@/components/dashboard/EarningsChart';
+
 
 const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -112,10 +112,6 @@ export default function DashboardPage() {
       {/* Stats */}
       <MonthlyDashboard stats={stats} month={month} year={year} />
 
-      {/* Chart */}
-      {stats.dailyEarnings.length > 0 && (
-        <EarningsChart data={stats.dailyEarnings} />
-      )}
 
       {/* Company breakdown */}
       {stats.companySummaries.length > 0 && (
