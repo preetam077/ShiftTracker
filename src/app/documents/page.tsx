@@ -35,6 +35,15 @@ function FileIcon({ mimeType, size = 20 }: { mimeType: string; size?: number }) 
   }
 }
 
+function getFileTypeBadge(mimeType: string): { label: string; color: string } {
+  if (mimeType.includes('pdf')) return { label: 'PDF', color: 'rgba(239, 68, 68, 0.15)' };
+  if (mimeType.startsWith('image/')) return { label: 'Image', color: 'rgba(59, 130, 246, 0.15)' };
+  if (mimeType.includes('word') || mimeType.includes('document')) return { label: 'DOC', color: 'rgba(124, 111, 234, 0.15)' };
+  if (mimeType.includes('sheet') || mimeType.includes('excel') || mimeType.includes('csv')) return { label: 'Sheet', color: 'rgba(34, 197, 94, 0.15)' };
+  if (mimeType.includes('text')) return { label: 'Text', color: 'rgba(139, 146, 176, 0.15)' };
+  return { label: 'File', color: 'rgba(139, 146, 176, 0.15)' };
+}
+
 function DocumentCard({
   doc,
   onDownload,
@@ -84,12 +93,15 @@ function DocumentCard({
     year: 'numeric',
   });
 
+  const badge = getFileTypeBadge(doc.mimeType);
+
   return (
-    <div className="glass-card p-4 fade-up group" style={{ animationDelay: '0.05s', opacity: 0 }}>
-      <div className="flex items-start gap-3">
+    <div className="glass-card fade-up group overflow-hidden" style={{ animationDelay: '0.05s', opacity: 0 }}>
+      {/* Main row */}
+      <div className="flex items-start gap-3 p-4 pb-3">
         {/* Icon */}
         <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+          className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
           style={{ background: 'var(--bg-elevated)' }}
         >
           <FileIcon mimeType={doc.mimeType} />
@@ -111,21 +123,17 @@ function DocumentCard({
                 }}
                 autoFocus
               />
-              <button onClick={handleRename} className="btn-ghost p-1 rounded-lg">
-                <Check size={14} className="text-[var(--accent-teal)]" />
+              <button onClick={handleRename} className="btn-ghost p-1.5 rounded-lg">
+                <Check size={16} className="text-[var(--accent-teal)]" />
               </button>
-              <button onClick={() => setEditing(false)} className="btn-ghost p-1 rounded-lg">
-                <X size={14} />
+              <button onClick={() => setEditing(false)} className="btn-ghost p-1.5 rounded-lg">
+                <X size={16} />
               </button>
             </div>
           ) : (
             <h3
-              className="text-sm font-semibold text-[var(--text-primary)] truncate cursor-pointer hover:text-[var(--accent-purple)] transition-colors"
+              className="text-sm font-semibold text-[var(--text-primary)] truncate"
               title={doc.name}
-              onClick={() => {
-                setEditName(doc.name);
-                setEditing(true);
-              }}
             >
               {doc.name}
             </h3>
@@ -133,15 +141,21 @@ function DocumentCard({
           <p className="text-xs text-[var(--text-muted)] mt-0.5 truncate" title={doc.fileName}>
             {doc.fileName}
           </p>
-          <div className="flex items-center gap-3 mt-1.5">
+          <div className="flex items-center gap-2 mt-2 flex-wrap">
+            <span
+              className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-md"
+              style={{ background: badge.color, color: 'var(--text-secondary)' }}
+            >
+              {badge.label}
+            </span>
             <span className="text-[10px] text-[var(--text-muted)]">{formatFileSize(doc.fileSize)}</span>
             <span className="text-[10px] text-[var(--text-muted)]">·</span>
             <span className="text-[10px] text-[var(--text-muted)]">{dateStr}</span>
           </div>
         </div>
 
-        {/* Actions */}
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
+        {/* Desktop-only inline actions (hidden on mobile) */}
+        <div className="hidden lg:flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
           <button
             onClick={() => {
               setEditName(doc.name);
@@ -176,6 +190,54 @@ function DocumentCard({
             <Trash2 size={14} className={confirmDelete ? 'text-red-400' : ''} />
           </button>
         </div>
+      </div>
+
+      {/* Mobile action bar — always visible on mobile, hidden on desktop */}
+      <div
+        className="flex lg:hidden border-t px-2 py-1.5"
+        style={{ borderColor: 'var(--border)' }}
+      >
+        <button
+          onClick={handleDownload}
+          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-colors active:bg-[var(--bg-elevated)]"
+          disabled={downloading}
+        >
+          {downloading ? (
+            <Loader2 size={15} className="animate-spin text-[var(--accent-teal)]" />
+          ) : (
+            <Download size={15} className="text-[var(--accent-teal)]" />
+          )}
+          <span className="text-xs font-medium text-[var(--text-secondary)]">
+            {downloading ? 'Saving…' : 'Download'}
+          </span>
+        </button>
+
+        <div className="w-px my-1.5" style={{ background: 'var(--border)' }} />
+
+        <button
+          onClick={() => {
+            setEditName(doc.name);
+            setEditing(true);
+          }}
+          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-colors active:bg-[var(--bg-elevated)]"
+        >
+          <Edit3 size={15} className="text-[var(--accent-purple)]" />
+          <span className="text-xs font-medium text-[var(--text-secondary)]">Rename</span>
+        </button>
+
+        <div className="w-px my-1.5" style={{ background: 'var(--border)' }} />
+
+        <button
+          onClick={handleDelete}
+          className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-all ${
+            confirmDelete ? 'bg-red-500/10' : 'active:bg-[var(--bg-elevated)]'
+          }`}
+        >
+          <Trash2 size={15} className={confirmDelete ? 'text-red-400' : 'text-[var(--text-muted)]'} />
+          <span className={`text-xs font-medium ${confirmDelete ? 'text-red-400' : 'text-[var(--text-secondary)]'}`}>
+            {confirmDelete ? 'Confirm?' : 'Delete'}
+          </span>
+        </button>
       </div>
     </div>
   );
