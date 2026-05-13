@@ -249,6 +249,22 @@ export default function DocumentsPage() {
       onDragLeave={() => setDragOver(false)}
       onDrop={handleDrop}
     >
+      {/* Hidden file input — lives outside modal so it's always in the DOM */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        style={{ display: 'none' }}
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (file) {
+            handleFileSelect(file);
+            if (!showUploadModal) setShowUploadModal(true);
+          }
+          // Reset so same file can be picked again
+          e.target.value = '';
+        }}
+      />
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between fade-up">
         <div>
@@ -356,7 +372,7 @@ export default function DocumentsPage() {
             background: 'rgba(10, 12, 18, 0.8)',
             backdropFilter: 'blur(8px)',
           }}
-          onClick={(e) => {
+          onMouseDown={(e) => {
             if (e.target === e.currentTarget) {
               setShowUploadModal(false);
               setSelectedFile(null);
@@ -367,6 +383,7 @@ export default function DocumentsPage() {
           <div
             className="glass-card w-full max-w-md p-6 fade-up"
             style={{ border: '1px solid var(--border)' }}
+            onClick={(e) => e.stopPropagation()}
           >
             {/* Modal header */}
             <div className="flex items-center justify-between mb-6">
@@ -388,7 +405,10 @@ export default function DocumentsPage() {
               <div
                 className="border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors hover:border-[var(--accent-purple)]"
                 style={{ borderColor: 'var(--border)' }}
-                onClick={() => fileInputRef.current?.click()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  fileInputRef.current?.click();
+                }}
               >
                 <div
                   className="w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-3"
@@ -455,20 +475,6 @@ export default function DocumentsPage() {
                 </div>
               </div>
             )}
-
-            {/* Hidden file input */}
-            <input
-              ref={fileInputRef}
-              type="file"
-              className="hidden"
-              accept="*/*"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) handleFileSelect(file);
-                // Reset so same file can be picked again
-                e.target.value = '';
-              }}
-            />
 
             {/* Actions */}
             {selectedFile && (
