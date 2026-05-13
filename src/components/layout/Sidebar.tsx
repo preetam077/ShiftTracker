@@ -10,6 +10,7 @@ import {
   Clock,
   LogOut,
   Menu,
+  Paperclip,
   Plus,
   Settings,
   X,
@@ -20,6 +21,7 @@ const NAV = [
   { href: '/dashboard', label: 'Dashboard', icon: BarChart3 },
   { href: '/shifts', label: 'Shift History', icon: CalendarDays },
   { href: '/shifts/new', label: 'Add Shift', icon: Plus },
+  { href: '/documents', label: 'Documents', icon: Paperclip },
   { href: '/settings', label: 'Settings', icon: Settings },
 ];
 
