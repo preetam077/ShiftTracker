@@ -1,0 +1,17 @@
+name: Supabase Keep-Alive
+
+on:
+  schedule:
+    - cron: '0 0 */3 * *'  # every 3 days
+  workflow_dispatch:        # lets you trigger it manually too
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase DB
+        run: |
+          curl -s -X GET \
+            "${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}/rest/v1/shifts?select=id&limit=1" \
+            -H "apikey: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}"
